@@ -9,10 +9,34 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Insert title here</title>
 	<link rel="stylesheet" href="/css/main.css"/>
+	<script>
+        function deletePost(postId){
+            alert("패스워드를 입력하셔야 합니다.");
+            var password =  prompt("PASSWD 입력","");
+            var form =  document.getElementById("deletePost");
+            if(password != null){
+            	form.postId.value=postId;
+            	form.password.value=password;
+            	form.submit();
+            }
+        }
+        
+        function exceptionPost(){
+			  var query = window.location.search.substring(1);
+			  if(query=="incorrectPassword"){
+                        alert("비밀번호가 일치하지 않습니다.");
+                        location.replace('/post/');
+			  }else if(query=="emptyPost"){
+			            alert("해당 게시글이 존재하지 않습니다.");
+			  }
+        }
+    </script>
 </head>
-<body>
-
-<body>
+<body onload="exceptionPost()">
+<form action = "/post/delete" id ="deletePost" method="post">
+    <input name="postId" type="hidden"/>
+    <input name="password" type="hidden"/>
+</form>
 <div class="main">
 	<div class="border-box">
 		<div class="contents-table"><!-- ContentsTable Start -->
@@ -23,55 +47,39 @@
 					<col style="width:*%">
 					<col style="width:15%">
 					<col style="width:15%">
+					<col style="width:10%">
+					<col style="width:10%">
 				</colgroup>
 				<thead>
 				<tr>
 					<th scope="col" class="first"></th>
 					<th scope="col">제목</th>
 					<th scope="col">작성자</th>
+					<th scope="col">조회수</th>
 					<th scope="col">작성일</th>
+					<th scope="col">삭제</th>
 				</tr>
 				</thead>
 				<tbody>
-				<c:foreach items="${cnuPostList}" var="cnuPost" }>
-				<tr>
-					<td>1</td>
-					<td class="tleft">
-						<a href="#">가나다라마바사아자차카타파하"</a>
-					</td>
-					<td>Riot 할머니</td>
-					<td>Robin Kim</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td class="tleft">
-						<a href="#">가나다라마바사아자차카타파하"</a>
-					</td>
-					<td>Riot 할머니</td>
-					<td>Robin Kim</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td class="tleft">
-						<a href="#">가나다라마바사아자차카타파하"</a>
-					</td>
-					<td>Riot 할머니</td>
-					<td>Robin Kim</td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td class="tleft">
-						<a href="#">가나다라마바사아자차카타파하"</a>
-					</td>
-					<td>Riot 할머니</td>
-					<td>Robin Kim</td>
-				</tr>
-				</c:foreach>
+				<c:forEach items="${cnuPostList}" var="cnuPost">
+					<tr>
+						<td>${cnuPost.postId}</td>
+						<td class="tleft">
+							<a href="/post/view?postId=${cnuPost.postId}">${cnuPost.title}</a>
+						</td>
+						<td>${cnuPost.author}</td>
+						<td>${cnuPost.viewCount}</td>
+						<td>
+						    <fmt:formatDate type="date" value="${cnuPost.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+						</td>
+						<td><input type="button" value="삭제" onClick="deletePost(${cnuPost.postId})"/></td>
+					</tr>
+				</c:forEach>
 				</tbody>
 			</table>
 		</div><!-- ContentsTable End -->
 		<div style="padding-top: 25px;">
-			<a href="#" class="btn btn-primary right">글쓰기</a>
+			<a href="/post/write" class="btn btn-primary right">글쓰기</a>
 		</div>
 	</div>
 </div>
