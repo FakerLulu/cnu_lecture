@@ -33,6 +33,7 @@
 				</tr>
 				</thead>
 				<tbody>
+				<c:foreach items="${cnuPostList}" var="cnuPost" }>
 				<tr>
 					<td>1</td>
 					<td class="tleft">
@@ -65,6 +66,7 @@
 					<td>Riot 할머니</td>
 					<td>Robin Kim</td>
 				</tr>
+				</c:foreach>
 				</tbody>
 			</table>
 		</div><!-- ContentsTable End -->

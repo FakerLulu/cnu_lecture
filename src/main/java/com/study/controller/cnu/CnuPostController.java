@@ -20,17 +20,28 @@ import java.util.List;
 @RequestMapping("/post")
 public class CnuPostController {
     @Value("${application.security.salt}") private String securityKey;
-
+    CnuRepository cnuRepository;
     @RequestMapping("")
     public String index() {
+    	List<CnuPost> cnuPostList = cnuRepository.selectCnuPostList();
         return "post/index";
     }
 
-    @RequestMapping("/write")
+    @RequestMapping(value= "/write",method = RequestMethod.GET)
     public String write() {
         return "post/write";
     }
-
+    @RequestMapping(value= "/write",method = RequestMethod.POST)
+    public String doWrite(String title, String content, String author, String password) {
+        CnuPost cnuPost = new CnuPost();
+        cnuPost.setTitle(title);
+        cnuPost.setAuthor(author);
+        cnuPost.setContent(content);
+        cnuPost.setPassword(password);
+    	
+    	
+    	return "redirect:/post";
+    }
     @RequestMapping("/view")
     public String view() {
         return "post/view";
